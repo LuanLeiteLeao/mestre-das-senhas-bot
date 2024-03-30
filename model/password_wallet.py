@@ -8,3 +8,4 @@ class PasswordWallet(Base):
     name = Column(String)
     login = Column(String, unique=True, index=True)
     password = Column(String)
+
