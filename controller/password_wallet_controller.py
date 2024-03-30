@@ -4,13 +4,12 @@ from model.password_wallet import PasswordWallet
 from validations.validators import is_maximum_value, is_not_null
 
 
-class PasswordWalletContro:
+class PasswordWalletController:
     def __init__(self) -> None:
-        self.session =  SessionLocal
-        self.query =  self.session.query(PasswordWallet)
+        self.session = SessionLocal
 
     def get_all(self):
-        self.query.all()
+        return self.session.query(PasswordWallet).all()
     
     def create(self,password_wallet:PasswordWallet):
         is_not_null(password_wallet.name,"nome")
@@ -21,6 +20,3 @@ class PasswordWalletContro:
 
     
 
-if __name__ == "__main__":
-    obj = PasswordWalletController()
-    obj.create(PasswordWallet())
