@@ -6,6 +6,6 @@ def is_not_null(fild,fild_verbose_name:str):
         raise NotNullExection(fild_verbose_name)
 
 
-def is_maximum_value(fild,numer_max:int):
-    if fild > numer_max:
-        raise MaximumValueExection(fild_verbose_name)
+def is_maximum_value(fild,fild_verbose_name:str,numer_max:int):
+    if len(fild) > numer_max:
+        raise MaximumValueExection(fild_verbose_name,numer_max)
