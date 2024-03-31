@@ -4,6 +4,7 @@ from unittest.mock import MagicMock
 
 from controller.password_wallet_controller import PasswordWalletController
 from database import SessionLocal
+from exception.validation_exception import NotNullExection
 from model.password_wallet import PasswordWallet
 
 class TestPasswordWalletController(TestCase):
@@ -32,12 +33,18 @@ class TestPasswordWalletController(TestCase):
             self.assertEqual(results[i].name,password.name)
             self.assertEqual(results[i].login,password.login)
             self.assertEqual(results[i].password,password.password)
+        
+        self.mock_session.query.assert_called_once_with(PasswordWallet)
+        self.mock_session.query.return_value.all.assert_called_once()
 
     def test_list_all_password_wallet_when_it_returns_nothing(self):
         results = self.controller.get_all()
         
         self.assertEqual(len(results),0)
         self.assertEqual(len(results),len([]))
+
+        self.mock_session.query.assert_called_once_with(PasswordWallet)
+        self.mock_session.query.return_value.all.assert_called_once()
     
     def test_list_all_password_wallet_when_return_only_one(self):
         mock_password = [PasswordWallet(id=1,name="facebook",login="maicon.luiz",password="asdsaduser123")]
@@ -55,6 +62,26 @@ class TestPasswordWalletController(TestCase):
         self.assertEqual(result.name,password.name)
         self.assertEqual(result.login,password.login)
         self.assertEqual(result.password,password.password)
+
+        self.mock_session.query.assert_called_once_with(PasswordWallet)
+        self.mock_session.query.return_value.all.assert_called_once()
+    
+    def test_create_password_wallet_validating_name_field_errors(self):
+        password_wallets = {
+            "name_null":"",
+            "name_none":None,
+            "name_empty":"       "
+        }
+
+        for key in password_wallets.keys():
+            with self.assertRaises(NotNullExection) as e:
+                password_wallet = PasswordWallet(name=password_wallets[key])
+                self.controller.create(password_wallet)
+                print(f"{key}:{password_wallets[key]}")
+
+            self.assertEqual("nome não pode ser nulo",str(e.exception))
+            self.mock_session.add.assert_not_called()
+
 
 
 if __name__ == '__main__':

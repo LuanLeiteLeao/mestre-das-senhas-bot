@@ -13,8 +13,10 @@ class PasswordWalletController:
     
     def create(self,password_wallet:PasswordWallet):
         is_not_null(password_wallet.name,"nome")
-        is_maximum_value(password_wallet.name,"nome")
+        is_maximum_value(password_wallet.name,"nome",40)
 
+        self.session.add(password_wallet)
+        self.session.commit()
     
      
 

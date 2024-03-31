@@ -1,8 +1,8 @@
 from exception.validation_exception import MaximumValueExection, NotNullExection
 
 
-def is_not_null(fild,fild_verbose_name:str):
-    if not fild:
+def is_not_null(fild:str,fild_verbose_name:str):
+    if not fild or fild.isspace():
         raise NotNullExection(fild_verbose_name)
 
 
